@@ -4,12 +4,12 @@ Use the `PaypalIPN` class in your project to handle the encoding of POST data, p
 
 To install this package using composer:
 
-    composer require overint/php-paypal-ipn
+    composer require al3xable/php-paypal-ipn
 
 Example Use Case
 ---------
 
-    use overint\PaypalIPN;
+    use al3xable\PaypalIPN;
     
     $ipn = new PaypalIPN();
     $ipn->useSandbox();

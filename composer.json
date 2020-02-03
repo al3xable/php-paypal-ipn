@@ -1,9 +1,13 @@
 {
-    "name": "overint/php-paypal-ipn",
+    "name": "al3xable/php-paypal-ipn",
     "description": "PHP Class for verifying PayPal IPN messages",
     "type": "library",
     "license": "MIT",
     "authors": [
+        {
+            "name": "Aliaksandr Zakharenka",
+            "email": "mail@al3xable.me"
+        },
         {
             "name": "overint",
             "email": "emcmahonzx@gmail.com"
@@ -13,7 +17,7 @@
     "require": {},
     "autoload": {
         "psr-4": {
-            "overint\\": "src"
+            "al3xable\\": "src"
         }
     }
 }
