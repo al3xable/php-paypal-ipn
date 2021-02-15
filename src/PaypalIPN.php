@@ -2,26 +2,27 @@
 
 namespace al3xable;
 
-use \Exception;
+use Exception;
 
 class PaypalIPN
 {
-    /** @var bool $useSandbox Indicates if the sandbox endpoint is used. */
-    private $useSandbox = false;
-    /** @var bool $useLocalCerts Indicates if the local certificates are used. */
-    private $useLocalCerts = true;
-
     /** Production Postback URL */
     const VERIFY_URI = 'https://ipnpb.paypal.com/cgi-bin/webscr';
+
     /** Sandbox Postback URL */
     const SANDBOX_VERIFY_URI = 'https://ipnpb.sandbox.paypal.com/cgi-bin/webscr';
 
-
     /** Response from PayPal indicating validation was successful */
     const VALID = 'VERIFIED';
+
     /** Response from PayPal indicating validation failed */
     const INVALID = 'INVALID';
 
+    /** @var bool $useSandbox Indicates if the sandbox endpoint is used. */
+    private $useSandbox = false;
+
+    /** @var bool $useLocalCerts Indicates if the local certificates are used. */
+    private $useLocalCerts = true;
 
     /**
      * Sets the IPN verification to sandbox mode (for use when testing,
@@ -43,35 +44,23 @@ class PaypalIPN
         $this->useLocalCerts = false;
     }
 
-
-    /**
-     * Determine endpoint to post the verification data to.
-     * @return string
-     */
-    public function getPaypalUri()
-    {
-        if ($this->useSandbox) {
-            return self::SANDBOX_VERIFY_URI;
-        } else {
-            return self::VERIFY_URI;
-        }
-    }
-
-
     /**
      * Verification Function
      * Sends the incoming post data back to PayPal using the cURL library.
      *
+     * @param string|null $raw_post_data Raw post data, if null try to get from php://input
      * @return bool
      * @throws Exception
      */
-    function verifyIPN()
+    public function verifyIPN($raw_post_data = null)
     {
-        if (!count($_POST)) {
-            throw new Exception("Missing POST Data");
+        if ($raw_post_data === null) {
+            if (!count($_POST)) {
+                throw new Exception("Missing POST Data");
+            }
+            $raw_post_data = file_get_contents('php://input');
         }
 
-        $raw_post_data = file_get_contents('php://input');
         $raw_post_array = explode('&', $raw_post_data);
         $myPost = [];
         foreach ($raw_post_array as $keyval) {
@@ -124,6 +113,19 @@ class PaypalIPN
             return true;
         } else {
             return false;
+        }
+    }
+
+    /**
+     * Determine endpoint to post the verification data to.
+     * @return string
+     */
+    public function getPaypalUri()
+    {
+        if ($this->useSandbox) {
+            return self::SANDBOX_VERIFY_URI;
+        } else {
+            return self::VERIFY_URI;
         }
     }
 }

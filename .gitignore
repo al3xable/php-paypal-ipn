@@ -1,2 +1,4 @@
 example.php
-/vendor/
+vendor
+composer.lock
+.idea
